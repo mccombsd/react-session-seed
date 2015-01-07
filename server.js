@@ -1,0 +1,157 @@
+/**
+ * Created by Drew on 12/17/2014.
+ */
+
+var fs = require('fs'),
+    express = require('express'),
+    path = require('path'),
+    favicon = require('serve-favicon'),
+    logger = require('morgan'),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser'),
+    debug = require('debug')('DevMag'),
+    React = require('react'),
+    Plates = require('plates'),
+    config = require('./config')('development'),
+    mongoose = require('mongoose'),
+    ItemModel = require('./app/schema/Item');
+
+var passport = require('passport'),
+    expressSession = require('express-session');
+
+var app = express();
+
+//Set up session and passport
+app.use(expressSession({
+    secret: config.secretKey,
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+//For requiring `.jsx` files as Node modules
+require('node-jsx').install({extension: '.jsx'});
+
+// view engine setup
+//app.set('views', path.join(__dirname, 'views'));
+//app.set('view engine', 'ejs');
+//app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'plates');
+
+// uncomment after placing your favicon in /public
+//app.use(favicon(__dirname + '/public/images/favicon.ico'));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+var App = require('./app/react/App.jsx');
+var Fluxxor = require('fluxxor'),
+    ItemStore = require('./app/stores/ItemStore'),
+    AppActions = require('./app/actions/AppActions');
+
+app.get('/api/loadItems', function (req, res) {
+    console.log('get(/api/loadItems)');
+
+    var pItems = ItemModel.find().exec();
+    pItems.then(function (items) {
+        var returnItems = items.map(function (item) {
+            return { name: item.name};
+        });
+
+        res.json(returnItems);
+    });
+});
+
+app.post('/api/addItem', function (req, res) {
+    console.log('post(/api/addItem): ' + JSON.stringify(req.body));
+
+    var newItem = new ItemModel();
+    newItem.name = req.body.name;
+    newItem.save();
+});
+
+// Render React on Server for all urls
+app.get('/*',function(req,res){
+    console.log('get(/*)');
+
+    var stores = {
+        'ItemStore': new ItemStore()
+    };
+    var flux = new Fluxxor.Flux(stores, AppActions);
+    var html = React.renderToString(React.createElement(App, {history: true, flux: flux}));
+
+    renderHtml(res, html, "");
+});
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+// error handlers
+
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        console.log(err);
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
+
+/*
+* Setup the app and listen
+*/
+app.set('port', process.env.PORT || config.port || 8000);
+
+mongoose.connect(config.mongo.url);
+var dbConnection = mongoose.connection;
+var expressServer;
+
+dbConnection.on('error', console.error.bind(console, 'connection error:'));
+
+dbConnection.once('open', function () {
+    console.log('Mongo DB connection made');
+    expressServer = app.listen(app.get('port'), function() {
+        debug('Express server listening on port ' + expressServer.address().port);
+        console.log('Express server listening on port ' + expressServer.address().port);
+    });
+});
+
+
+/*
+* Handles injects the application before serving base html
+*/
+function renderHtml(res, appHtml, appData) {
+    fs.readFile(
+        path.join(__dirname, 'public', 'base.html'),
+        { encoding: 'utf-8'},
+        function(err, tmpl) {
+            var html = Plates.bind(tmpl, {
+                "App": appHtml  //, appData: 'APP_DATA = ' + JSON.stringify(appData)
+            });
+
+            res.set('Content-Type', 'text/html');
+            res.send(html);
+        }
+    );
+}
