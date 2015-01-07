@@ -7,6 +7,7 @@ var Schema = Mongoose.Schema;
 
 //Define document schema here
 var UserSchema = new Schema({
+    username: String,
     email: String,
     passwork: String,
     createdOn: { type: Date, default: Date.now }

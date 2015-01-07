@@ -14,9 +14,11 @@ var fs = require('fs'),
     Plates = require('plates'),
     config = require('./config')('development'),
     mongoose = require('mongoose'),
-    ItemModel = require('./app/schema/Item');
+    ItemModel = require('./app/schema/Item'),
+    UserModel = require('./app/schema/User');
 
 var passport = require('passport'),
+    LocalStrategy = require('passport-local').Strategy,
     expressSession = require('express-session');
 
 var app = express();
@@ -29,6 +31,61 @@ app.use(expressSession({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+passport.serializeUser(function(user, done) {
+    done(null, user._id);
+});
+
+passport.deserializeUser(function(id, done) {
+    UserModel.findById(id, function(err, user) {
+        done(err, user);
+    });
+});
+
+passport.use('login', new LocalStrategy({
+        passReqToCallback : true
+    },
+    function(req, username, password, done) {
+        console.log('!!!! passport.use.login');
+        // check in mongo if a user with username exists or not
+        User.findOne({ 'username' :  username },
+            function(err, user) {
+                console.log('@@@@@@@');
+                // In case of any error, return using the done method
+                if (err)
+                    return done(err);
+                // Username does not exist, log error & redirect back
+                if (!user){
+                    console.log('User Not Found with username '+username);
+                    return done(null, false); //, req.flash('message', 'User Not found.'));
+                }
+                // User exists but wrong password, log the error
+                if (!isValidPassword(user, password)){
+                    console.log('Invalid Password');
+                    return done(null, false); //, req.flash('message', 'Invalid Password'));
+                }
+                // User and password both match, return user from
+                // done method which will be treated like success
+                return done(null, user);
+            }
+        );
+    }));
+
+
+//app.post('/user/login', passport.authenticate('login', {
+//    successRedirect: '/',
+//    failureRedirect: '/',
+//    failureFlash : true
+//}));
+
+app.post('/user/login', function () {
+    console.log('test /user/login');
+});
+
+function isValidPassword(user, password) {
+    // Yes, this should be more secure
+    return user.password === password;
+};
 
 //For requiring `.jsx` files as Node modules
 require('node-jsx').install({extension: '.jsx'});

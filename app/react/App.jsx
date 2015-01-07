@@ -9,6 +9,7 @@ var React = require('react'),
     RouterMixin = require('react-mini-router').RouterMixin,
     Home = require('./components/Home.jsx'),
     ItemList = require('./components/ItemList.jsx'),
+    Login = require('./components/Login.jsx'),
     Fluxxor = require('fluxxor'),
     FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -17,7 +18,8 @@ var App = React.createClass({
 
     routes: {
         '/': 'home',
-        '/itemlist': 'itemlist'
+        '/itemlist': 'itemlist',
+        '/login': 'login'
     },
 
     render: function () {
@@ -36,6 +38,10 @@ var App = React.createClass({
 
     itemlist: function () {
         return React.createElement(ItemList);
+    },
+
+    login: function () {
+        return React.createElement(Login);
     },
 
     notFound: function (path) {
