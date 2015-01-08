@@ -10,6 +10,7 @@ var React = require('react'),
     Home = require('./components/Home.jsx'),
     ItemList = require('./components/ItemList.jsx'),
     Login = require('./components/Login.jsx'),
+    Error = require('./components/Error.jsx'),
     Fluxxor = require('fluxxor'),
     FluxMixin = Fluxxor.FluxMixin(React);
 
@@ -19,11 +20,11 @@ var App = React.createClass({
     routes: {
         '/': 'home',
         '/itemlist': 'itemlist',
-        '/login': 'login'
+        '/login': 'login',
+        '/error': 'error'
     },
 
     render: function () {
-        console.log('App.render');
         return (
             <div>
               {this.renderCurrentRoute()}
@@ -32,7 +33,6 @@ var App = React.createClass({
     },
 
     home: function () {
-        console.log('App.home');
         return React.createElement(Home);
     },
 
@@ -42,6 +42,10 @@ var App = React.createClass({
 
     login: function () {
         return React.createElement(Login);
+    },
+
+    error: function () {
+        return React.createElement(Error);
     },
 
     notFound: function (path) {

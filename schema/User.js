@@ -9,7 +9,7 @@ var Schema = Mongoose.Schema;
 var UserSchema = new Schema({
     username: String,
     email: String,
-    passwork: String,
+    password: String,
     createdOn: { type: Date, default: Date.now }
 });
 
