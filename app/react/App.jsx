@@ -9,6 +9,7 @@ var React = require('react'),
     RouterMixin = require('react-mini-router').RouterMixin,
     Home = require('./components/Home.jsx'),
     ItemList = require('./components/ItemList.jsx'),
+    Private = require('./components/Private.jsx'),
     Login = require('./components/Login.jsx'),
     Error = require('./components/Error.jsx'),
     Fluxxor = require('fluxxor'),
@@ -21,6 +22,7 @@ var App = React.createClass({
         '/': 'home',
         '/itemlist': 'itemlist',
         '/login': 'login',
+        '/private': 'private',
         '/error': 'error'
     },
 
@@ -42,6 +44,10 @@ var App = React.createClass({
 
     login: function () {
         return React.createElement(Login);
+    },
+
+    private: function () {
+        return React.createElement(Private);
     },
 
     error: function () {

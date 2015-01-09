@@ -18,9 +18,9 @@ var fs = require('fs'),
     UserModel = require('./schema/User'),
     flash = require('connect-flash');
 
-var passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy,
-    expressSession = require('express-session');
+//var passport = require('passport'),
+//    LocalStrategy = require('passport-local').Strategy,
+var expressSession = require('express-session');
 
 var app = express();
 
@@ -30,8 +30,8 @@ app.use(expressSession({
     resave: false,
     saveUninitialized: false
 }));
-app.use(passport.initialize());
-app.use(passport.session());
+//app.use(passport.initialize());
+//app.use(passport.session());
 app.use(flash());
 
 
@@ -58,6 +58,8 @@ var Fluxxor = require('fluxxor'),
     ItemStore = require('./app/stores/ItemStore'),
     AppActions = require('./app/actions/AppActions');
 
+var passport = require('./passport/Setup')(app);
+/*
 passport.use('local', new LocalStrategy({
             passReqToCallback : true
         },
@@ -114,6 +116,7 @@ function isValidPassword(user, password) {
     console.log(user);
     return user.password === password;
 };
+*/
 
 app.get('/api/loadItems', function (req, res) {
     console.log('get(/api/loadItems)');
