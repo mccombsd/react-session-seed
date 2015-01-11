@@ -14,8 +14,9 @@ var Home = React.createClass({
             <div>
                 <h2>Home Component</h2>
                 <div>
-                    <a href="/ItemList">Item List</a>
-                    <a href="/Login">Login</a>
+                    <a className="btn btn-default" href="/ItemList">Item List</a>
+                    <a className="btn btn-default" href="/Login">Login</a>
+                    <a className="btn btn-default" href="/Private">Private</a>
                 </div>
             </div>
         );

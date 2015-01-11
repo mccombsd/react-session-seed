@@ -19,9 +19,16 @@ module.exports = function (app) {
     app.use(Passport.session());
 
     var authorizeRoute = function (req, res, next) {
-        if (req.isAuthenticated())
+        if (req.isAuthenticated()) {
             return next();
-        req.session.returnTo = req.originalUrl;
+        }
+
+        var returnUrl = req.originalUrl;
+        if (returnUrl === "/login") {
+            returnUrl = "/";
+        }
+        console.log('returnTo: ' + returnUrl)
+        req.session.returnTo = returnUrl;
         res.redirect('/login');
     };
 
@@ -69,9 +76,9 @@ module.exports = function (app) {
 
     app.post('/user/login',
         Passport.authenticate('local', {
-                //successRedirect: '/',
+                successRedirect: '/',
                 failureRedirect: '/Login',
-                successReturnToOrRedirect: true,
+                //successReturnToOrRedirect: true,
                 failureFlash: true
             }
         )
@@ -93,6 +100,8 @@ module.exports = function (app) {
         function(req,res){
             console.log('get(/private): ' + req.originalUrl);
 
+
+
             var stores = {
                 'ItemStore': new ItemStore()
             };
@@ -100,6 +109,7 @@ module.exports = function (app) {
             var html = React.renderToString(React.createElement(App, {history: true, flux: flux, path: req.originalUrl}));
 
             renderHtml(res, html, "");
+
         }
     );
 

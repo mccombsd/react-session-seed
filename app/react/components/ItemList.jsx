@@ -35,7 +35,7 @@ var ItemList = React.createClass({
         return (
             <div>
                 <div>
-                    <a href="/">Home</a>
+                    <a className="btn btn-default" href="/">Home</a>
                 </div>
                 <h3>{'Number of items: ' + items.length}</h3>
                 <div className="list-group">
