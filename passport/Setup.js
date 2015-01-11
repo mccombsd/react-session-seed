@@ -4,15 +4,7 @@
 
 var User = require('../schema/User'),
     Passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy,
-    ItemStore = require('../app/stores/ItemStore'),
-    React = require('react'),
-    Fluxxor = require('fluxxor'),
-    App = require('../app/react/App.jsx'),
-    AppActions = require('../app/actions/AppActions'),
-    Plates = require('plates'),
-    fs = require('fs'),
-    path = require('path');
+    LocalStrategy = require('passport-local').Strategy;;
 
 module.exports = function (app) {
     app.use(Passport.initialize());
@@ -20,15 +12,20 @@ module.exports = function (app) {
 
     var authorizeRoute = function (req, res, next) {
         if (req.isAuthenticated()) {
+            console.log('setup.authorizeRoute: authorized');
             return next();
         }
 
+        console.log('setup.authorizeRoute: NOT authorized');
+        /*
         var returnUrl = req.originalUrl;
         if (returnUrl === "/login") {
             returnUrl = "/";
         }
         console.log('returnTo: ' + returnUrl)
         req.session.returnTo = returnUrl;
+        */
+
         res.redirect('/login');
     };
 
@@ -63,12 +60,12 @@ module.exports = function (app) {
     );
 
     Passport.serializeUser(function(user, done) {
-        console.log('passport.serializeUser: ' + user._id);
+        //console.log('passport.serializeUser: ' + user._id);
         done(null, user._id);
     });
 
     Passport.deserializeUser(function(id, done) {
-        console.log('passport.deserializeUser: ' + id);
+        //console.log('passport.deserializeUser: ' + id);
         User.findById(id, function(err, user) {
             done(err, user);
         });
@@ -76,9 +73,12 @@ module.exports = function (app) {
 
     app.post('/user/login',
         Passport.authenticate('local', {
-                successRedirect: '/',
+                successRedirect: '/AuthorizeSession',
                 failureRedirect: '/Login',
-                //successReturnToOrRedirect: true,
+                /*
+                Allows changing the URL to return to on success
+                successReturnToOrRedirect: true,
+                 */
                 failureFlash: true
             }
         )
@@ -93,40 +93,6 @@ module.exports = function (app) {
         // Yes, this should be more secure
         return user.password === password;
     };
-
-    // Render React on Server for all urls
-    app.get(['/private'],
-        authorizeRoute,
-        function(req,res){
-            console.log('get(/private): ' + req.originalUrl);
-
-
-
-            var stores = {
-                'ItemStore': new ItemStore()
-            };
-            var flux = new Fluxxor.Flux(stores, AppActions);
-            var html = React.renderToString(React.createElement(App, {history: true, flux: flux, path: req.originalUrl}));
-
-            renderHtml(res, html, "");
-
-        }
-    );
-
-    function renderHtml(res, appHtml, appData) {
-        fs.readFile(
-            path.join(__dirname, '../', 'public', 'base.html'),
-            { encoding: 'utf-8'},
-            function(err, tmpl) {
-                var html = Plates.bind(tmpl, {
-                    "App": appHtml  //, appData: 'APP_DATA = ' + JSON.stringify(appData)
-                });
-
-                res.set('Content-Type', 'text/html');
-                res.send(html);
-            }
-        );
-    }
 
     return Passport;
 };

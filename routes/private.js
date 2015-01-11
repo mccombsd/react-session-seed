@@ -1,16 +1,12 @@
 /**
- * Created by Drew on 1/8/2015.
+ * Created by Drew on 1/10/2015.
  */
 
 var Router = require('express').Router();
 
 Router.get(
     [
-        '/',
-        '/itemlist',
-        '/login',
-        '/private',
-        '/authorizesession'
+        '/private'
     ],
     require('../templates/app')
 );

@@ -17,11 +17,11 @@ fs.readFile(
     }
 );
 
-function renderHtml(res, appHtml, userData) {
+function renderHtml(res, appHtml, appData) {
     var html = Plates.bind(
         STATIC_BASE_HTML, {
-            "APP": appHtml,
-            "USER_DATA": 'USER_DATA = ' + JSON.stringify(userData)
+            "App": appHtml
+            //, appData: 'APP_DATA = ' + JSON.stringify(appData)
         }
     );
 
@@ -31,19 +31,11 @@ function renderHtml(res, appHtml, userData) {
 
 
 module.exports = function (req, res, next) {
-    console.log('!appRender: ' + req.originalUrl);
+    console.log('!privateRender: ' + req.originalUrl);
 
-    /*
-    Isomorphic server render... Not working well with authentication
     var html = React.renderToString(
-        require('../app/roots/app')(req.originalUrl)
-    );*/
-    var html = "";
-    renderHtml(
-        res,
-        html,
-        {
-            auth: req.isAuthenticated()
-        }
-    )
+        require('../app/roots/private')(req.originalUrl)
+    );
+
+    renderHtml(res, html, "");
 };

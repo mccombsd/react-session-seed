@@ -10,10 +10,12 @@ var React = require('react'),
     Home = require('./components/Home.jsx'),
     ItemList = require('./components/ItemList.jsx'),
     Private = require('./components/Private.jsx'),
+    AuthorizeSession = require('./components/AuthorizeSession.jsx'),
     Login = require('./components/Login.jsx'),
     Error = require('./components/Error.jsx'),
     Fluxxor = require('fluxxor'),
-    FluxMixin = Fluxxor.FluxMixin(React);
+    FluxMixin = Fluxxor.FluxMixin(React),
+    Auth = require('../clients/Authentication');
 
 var App = React.createClass({
     mixins: [ RouterMixin, FluxMixin ],
@@ -23,10 +25,12 @@ var App = React.createClass({
         '/itemlist': 'itemlist',
         '/login': 'login',
         '/private': 'private',
+        '/authorizesession': 'authorizeSession',
         '/error': 'error'
     },
 
     render: function () {
+        console.log('!!App.render: new route')
         return (
             <div>
               {this.renderCurrentRoute()}
@@ -47,7 +51,20 @@ var App = React.createClass({
     },
 
     private: function () {
+
+        if (!Auth.isAuthorized()) {
+            console.log('app.private: NOT authorized');
+            window.location.replace('/login');
+            return;
+        }
+
+        console.log('app.private: authorized');
         return React.createElement(Private);
+    },
+
+    authorizeSession: function () {
+        console.log('App.authorizeSession');
+        return React.createElement(AuthorizeSession);
     },
 
     error: function () {

@@ -3,8 +3,24 @@
  */
 
 module.exports = {
-    willTransitionTo: function (transition) {
-        console.log('Authentication.willTransitionTo');
-        transition.redirect('/login');
+    isAuthorized: function () {
+        console.log('Authentication.isAuthorized');
+
+        if (USER_DATA) {
+            this._loggedIn = USER_DATA.auth;
+        }
+        else {
+            this._loggedIn = this._loggedIn || false;
+        }
+        
+        return this._loggedIn;
+    },
+
+    login: function () {
+        this._loggedIn = true;
+    },
+
+    logout: function () {
+        this._loggedIn = false;
     }
 }

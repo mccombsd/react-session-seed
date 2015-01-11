@@ -9,7 +9,6 @@ var React = require('react'),
     Auth = require('../../clients/Authentication');
 
 var Private = React.createClass({
-    mixins: [Auth],
     render: function () {
         return (
             <div>
