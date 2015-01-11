@@ -12,7 +12,7 @@ module.exports = {
         else {
             this._loggedIn = this._loggedIn || false;
         }
-        
+
         return this._loggedIn;
     },
 

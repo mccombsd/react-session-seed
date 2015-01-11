@@ -13,6 +13,8 @@ var Private = React.createClass({
         return (
             <div>
                 <h2>This was private!</h2>
+                <h3>{this.props.name}</h3>
+                <a className="btn btn-default" href="/private2">Private 2</a>
                 <a className="btn btn-default" href="/user/logout">Logout</a>
             </div>
         );

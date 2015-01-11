@@ -10,6 +10,7 @@ Router.get(
         '/itemlist',
         '/login',
         '/private',
+        '/private2',
         '/authorizesession'
     ],
     require('../templates/app')

@@ -73,7 +73,7 @@ module.exports = function (app) {
 
     app.post('/user/login',
         Passport.authenticate('local', {
-                successRedirect: '/AuthorizeSession',
+                successRedirect: '/Private',
                 failureRedirect: '/Login',
                 /*
                 Allows changing the URL to return to on success

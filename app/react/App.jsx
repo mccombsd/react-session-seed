@@ -25,6 +25,7 @@ var App = React.createClass({
         '/itemlist': 'itemlist',
         '/login': 'login',
         '/private': 'private',
+        '/private2': 'private2',
         '/authorizesession': 'authorizeSession',
         '/error': 'error'
     },
@@ -59,7 +60,19 @@ var App = React.createClass({
         }
 
         console.log('app.private: authorized');
-        return React.createElement(Private);
+        return React.createElement(Private, { name: 'One'});
+    },
+
+    private2: function () {
+
+        if (!Auth.isAuthorized()) {
+            console.log('app.private: NOT authorized');
+            window.location.replace('/login');
+            return;
+        }
+
+        console.log('app.private: authorized');
+        return React.createElement(Private, { name: 'Two'});
     },
 
     authorizeSession: function () {
