@@ -4,7 +4,8 @@
 
 var User = require('../schema/User'),
     Passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy;;
+    LocalStrategy = require('passport-local').Strategy,
+    bcrypt = require('bcrypt-nodejs');
 
 module.exports = function (app) {
     app.use(Passport.initialize());
@@ -12,19 +13,8 @@ module.exports = function (app) {
 
     var authorizeRoute = function (req, res, next) {
         if (req.isAuthenticated()) {
-            console.log('setup.authorizeRoute: authorized');
             return next();
         }
-
-        console.log('setup.authorizeRoute: NOT authorized');
-        /*
-        var returnUrl = req.originalUrl;
-        if (returnUrl === "/login") {
-            returnUrl = "/";
-        }
-        console.log('returnTo: ' + returnUrl)
-        req.session.returnTo = returnUrl;
-        */
 
         res.redirect('/login');
     };
@@ -60,12 +50,10 @@ module.exports = function (app) {
     );
 
     Passport.serializeUser(function(user, done) {
-        //console.log('passport.serializeUser: ' + user._id);
         done(null, user._id);
     });
 
     Passport.deserializeUser(function(id, done) {
-        //console.log('passport.deserializeUser: ' + id);
         User.findById(id, function(err, user) {
             done(err, user);
         });
@@ -90,8 +78,10 @@ module.exports = function (app) {
     });
 
     function isValidPassword(user, password) {
-        // Yes, this should be more secure
-        return user.password === password;
+        return bcrypt.compareSync(
+            password,
+            user.password
+        );
     };
 
     return Passport;

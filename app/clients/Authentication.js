@@ -16,11 +16,9 @@ module.exports = {
         return this._loggedIn;
     },
 
-    login: function () {
-        this._loggedIn = true;
-    },
+    validPassword: function (password) {
+        var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$/;
 
-    logout: function () {
-        this._loggedIn = false;
+        return regex.test(password);
     }
 }

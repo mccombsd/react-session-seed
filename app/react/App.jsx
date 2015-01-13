@@ -10,8 +10,8 @@ var React = require('react'),
     Home = require('./components/Home.jsx'),
     ItemList = require('./components/ItemList.jsx'),
     Private = require('./components/Private.jsx'),
-    AuthorizeSession = require('./components/AuthorizeSession.jsx'),
     Login = require('./components/Login.jsx'),
+    Register = require('./components/Register.jsx'),
     Error = require('./components/Error.jsx'),
     Fluxxor = require('fluxxor'),
     FluxMixin = Fluxxor.FluxMixin(React),
@@ -24,9 +24,9 @@ var App = React.createClass({
         '/': 'home',
         '/itemlist': 'itemlist',
         '/login': 'login',
+        '/register': 'register',
         '/private': 'private',
         '/private2': 'private2',
-        '/authorizesession': 'authorizeSession',
         '/error': 'error'
     },
 
@@ -51,6 +51,10 @@ var App = React.createClass({
         return React.createElement(Login);
     },
 
+    register: function () {
+        return React.createElement(Register)
+    },
+
     private: function () {
 
         if (!Auth.isAuthorized()) {
@@ -73,11 +77,6 @@ var App = React.createClass({
 
         console.log('app.private: authorized');
         return React.createElement(Private, { name: 'Two'});
-    },
-
-    authorizeSession: function () {
-        console.log('App.authorizeSession');
-        return React.createElement(AuthorizeSession);
     },
 
     error: function () {

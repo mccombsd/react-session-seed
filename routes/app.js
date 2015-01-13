@@ -9,6 +9,7 @@ Router.get(
         '/',
         '/itemlist',
         '/login',
+        '/register',
         '/private',
         '/private2',
         '/authorizesession'
