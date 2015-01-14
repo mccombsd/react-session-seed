@@ -15,53 +15,45 @@ var Register = React.createClass({
     getInitialState: function () {
         return {
             username: null,
-            usernameValid: false,
             password: null,
-            passwordValid: false,
-            password2: null,
-            password2Value: false
+            password2: null
         };
     },
 
-    validPasswords: function () {
-
-        if (this.state.password !== undefined &&
+    validPassword: function () {
+        return (
+            this.state.password !== undefined &&
             this.state.password !== null &&
             Auth.validPassword(this.state.password)
-        ) {
-            this.state.passwordValid = true;
-        }
+        );
+    },
 
-        if (this.state.password2 !== undefined &&
+    validPassword2: function () {
+        return (
+            this.state.password2 !== undefined &&
             this.state.password2 !== null &&
             this.state.password === this.state.password2
-        ) {
-            this.state.password2Value = true;
-        }
-
-        return (
-               this.state.passwordValid &&
-               this.state.password2Valid
         );
     },
 
     render: function () {
-        var disabled = 'disabled';
+        var disabled = 'disabled',
+            passwordValid = this.validPassword(),
+            password2Valid = this.validPassword2();
 
-        console.log('this.validPasswords(): ' + this.validPasswords());
-        if (this.validPasswords()) {
+        if (passwordValid && password2Valid) {
             disabled = '';
         }
 
         var passwordClasses = cx({
-                'form-control': true,
-                'has-error': !this.state.passwordValid
+                'form-group': true,
+                'has-error': !passwordValid
             }
         );
 
         var password2Classes = cx({
-                'form-control': true,
-                'has-error': !this.state.password2Valid
+                'form-group': true,
+                'has-error': !password2Valid
             }
         );
 
@@ -92,11 +84,11 @@ var Register = React.createClass({
                             />
                         </div>
                     </div>
-                    <div className="form-group">
+                    <div className={passwordClasses}>
                         <label className="col-sm-2">Password</label>
                         <div className="col-sm-10">
                             <input
-                                className={passwordClasses}
+                                className="form-control"
                                 name="password"
                                 type="password"
                                 placeholder="Enter password"
@@ -104,11 +96,11 @@ var Register = React.createClass({
                             />
                         </div>
                     </div>
-                    <div className="form-group">
+                    <div className={password2Classes}>
                         <div className="col-sm-2"></div>
                         <div className="col-sm-10">
                             <input
-                                className={password2Classes}
+                                className="form-control"
                                 name="password2"
                                 type="password"
                                 placeholder="Re-enter password"
