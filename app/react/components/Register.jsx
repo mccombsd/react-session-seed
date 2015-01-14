@@ -55,11 +55,12 @@ var Register = React.createClass({
                 'form-group': true,
                 'has-error': !password2Valid
             }
+
         );
 
         return (
             <div>
-                <form className="form-horizontal" action="/user/signup" method="post">
+                <form className="form-horizontal" action="/user/register" method="post">
                     <div className="form-group">
                         <label className="col-sm-2">User name</label>
                         <div className="col-sm-10">
