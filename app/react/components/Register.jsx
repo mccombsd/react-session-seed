@@ -16,7 +16,8 @@ var Register = React.createClass({
         return {
             username: null,
             password: null,
-            password2: null
+            password2: null,
+            validUsername: false
         };
     },
 
@@ -36,6 +37,13 @@ var Register = React.createClass({
         );
     },
 
+    validateUsername: function () {
+        var that = this;
+        Auth.validateUsername(this.state.username, function (res) {
+            that.setState({ validUsername: res.valid});
+        });
+    },
+
     render: function () {
         var disabled = 'disabled',
             passwordValid = this.validPassword(),
@@ -45,15 +53,23 @@ var Register = React.createClass({
             disabled = '';
         }
 
+        var usernameClasses = cx({
+            'form-group': true,
+            'has-error': !this.state.validUsername,
+            'has-success': this.state.validUsername
+        });
+
         var passwordClasses = cx({
                 'form-group': true,
-                'has-error': !passwordValid
+                'has-error': !passwordValid,
+                'has-success': passwordValid
             }
         );
 
         var password2Classes = cx({
                 'form-group': true,
-                'has-error': !password2Valid
+                'has-error': !password2Valid,
+                'has-success': password2Valid
             }
 
         );
@@ -61,7 +77,7 @@ var Register = React.createClass({
         return (
             <div>
                 <form className="form-horizontal" action="/user/register" method="post">
-                    <div className="form-group">
+                    <div className={usernameClasses}>
                         <label className="col-sm-2">User name</label>
                         <div className="col-sm-10">
                             <input
@@ -70,6 +86,7 @@ var Register = React.createClass({
                                 type="text"
                                 placeholder="Enter user name"
                                 valueLink={this.linkState('username')}
+                                onBlur={this.validateUsername}
                             />
                         </div>
                     </div>

@@ -137,6 +137,27 @@ module.exports = function (app) {
         res.redirect('/');
     });
 
+    app.get('/user/validateUsername', function (req, res) {
+        console.log('/user/validateUsername: ' + JSON.stringify(req.query.username));
+
+        User.findOne({ 'username' :  req.query.username }, function (err, user) {
+            var response = {
+                valid: true,
+                error: false
+            }
+
+            if (err) {
+                response.error = true;
+            }
+
+            if (user) {
+                response.valid = false;
+            }
+
+            res.send(JSON.stringify(response));
+        });
+    });
+
     function isValidPassword(user, password) {
         return bcrypt.compareSync(
             password,
