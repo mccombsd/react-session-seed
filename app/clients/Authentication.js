@@ -24,6 +24,16 @@ module.exports = {
         return regex.test(password);
     },
 
+    validEmail: function (email) {
+        var regex = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/;
+
+        if (email) {
+            return regex.test(email.toUpperCase());
+        }
+
+        return false;
+    },
+
     validateUsername: function (username, callback) {
         if (callback) {
             superagent.get('/user/validateUsername', 'username=' + username, function (err, response) {
