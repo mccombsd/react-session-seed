@@ -38,12 +38,19 @@ module.exports = function (req, res, next) {
     var html = React.renderToString(
         require('../app/roots/app')(req.originalUrl)
     );*/
+
+    var username = '';
+    if (req.user) {
+        username = req.user.username;
+    }
+
     var html = "";
     renderHtml(
         res,
         html,
         {
-            auth: req.isAuthenticated()
+            auth: req.isAuthenticated(),
+            username: username
         }
     )
 };

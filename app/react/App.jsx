@@ -12,6 +12,7 @@ var React = require('react'),
     Private = require('./components/Private.jsx'),
     Login = require('./components/Login.jsx'),
     Register = require('./components/Register.jsx'),
+    Base = require('./Base.jsx'),
     Error = require('./components/Error.jsx'),
     Fluxxor = require('fluxxor'),
     FluxMixin = Fluxxor.FluxMixin(React),
@@ -31,11 +32,8 @@ var App = React.createClass({
     },
 
     render: function () {
-        console.log('!!App.render: new route')
         return (
-            <div>
-              {this.renderCurrentRoute()}
-            </div>
+            <Base routeComponent={this.renderCurrentRoute()} />
         );
     },
 

@@ -18,6 +18,17 @@ module.exports = {
         return this._loggedIn;
     },
 
+    username: function () {
+        if (USER_DATA) {
+            this._username = USER_DATA.username;
+        }
+        else {
+            this._username = this._username || '';
+        }
+
+        return this._username;
+    },
+
     validPassword: function (password) {
         var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$/;
 
