@@ -5,7 +5,8 @@
  * Create by Drew 1/6/2015
  */
 
-var React = require('react');
+var React = require('react'),
+    ButtonList = require('./ButtonList.jsx');
 
 var Home = React.createClass({
     render: function () {
@@ -13,11 +14,8 @@ var Home = React.createClass({
        return (
             <div>
                 <h2>Home Component</h2>
-                <div>
-                    <a className="btn btn-default" href="/Login">Login</a>
-                    <a className="btn btn-default" href="/Private">Private</a>
-                    <a className="btn btn-default" href="/private2">Private 2</a>
-                </div>
+
+                <ButtonList />
             </div>
         );
     }
