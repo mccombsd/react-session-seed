@@ -24,6 +24,9 @@ module.exports = function (app) {
                 passReqToCallback : true
             },
             function(req, username, password, done) {
+
+                console.log('login validation: ' + username);
+
                 // check in mongo if a user with username exists or not
                 User.findOne({ 'username' :  username },
                     function(err, user) {
@@ -159,6 +162,8 @@ module.exports = function (app) {
     });
 
     function isValidPassword(user, password) {
+        console.log('isValidPassword: ' + password);
+        console.log('isValidPassword: ' + user.password);
         return bcrypt.compareSync(
             password,
             user.password

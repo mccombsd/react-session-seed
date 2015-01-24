@@ -9,5 +9,3 @@ require('react').render(
     require('../roots/app')(),
     document.getElementById('APP')
 );
-
-console.log('!!Bootstrap ran');

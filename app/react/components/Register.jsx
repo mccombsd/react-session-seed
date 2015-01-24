@@ -7,7 +7,13 @@
 
 var React = require('react'),
     cx = React.addons.classSet,
-    Auth = require('../../clients/Authentication');
+    Auth = require('../../clients/Authentication'),
+    Bootstrap = require('react-bootstrap'),
+    Input = Bootstrap.Input,
+    Label = Bootstrap.Label,
+    Grid = Bootstrap.Grid,
+    Col = Bootstrap.Col,
+    Panel = Bootstrap.Panel;
 
 var Register = React.createClass({
     mixins: [React.addons.LinkedStateMixin],
@@ -93,10 +99,10 @@ var Register = React.createClass({
         });
 
         return (
-            <div>
+            <Panel>
                 <form className="form-horizontal" action="/user/register" method="post">
                     <div className={usernameClasses}>
-                        <label className="col-sm-2">User name</label>
+                        <label className="col-sm-2 col-sm-offset-2">User name</label>
                         <div className="col-sm-4">
                             <input
                                 className="form-control"
@@ -109,7 +115,7 @@ var Register = React.createClass({
                         </div>
                     </div>
                     <div className={emailClasses}>
-                        <label className="col-sm-2">Email</label>
+                        <label className="col-sm-2 col-sm-offset-2">Email</label>
                         <div className="col-sm-4">
                             <input
                                 className="form-control"
@@ -121,7 +127,7 @@ var Register = React.createClass({
                         </div>
                     </div>
                     <div className={passwordClasses}>
-                        <label className="col-sm-2">Password</label>
+                        <label className="col-sm-2 col-sm-offset-2">Password</label>
                         <div className="col-sm-4">
                             <input
                                 className="form-control"
@@ -133,7 +139,7 @@ var Register = React.createClass({
                         </div>
                     </div>
                     <div className={password2Classes}>
-                        <div className="col-sm-2"></div>
+                        <div className="col-sm-2 col-sm-offset-2"></div>
                         <div className="col-sm-4">
                             <input
                                 className="form-control"
@@ -144,12 +150,12 @@ var Register = React.createClass({
                             />
                         </div>
                     </div>
-                    <div className="col-sm-2"></div>
+                    <div className="col-sm-2 col-sm-offset-2"></div>
                     <div className="col-sm-4">
                         <button className="btn btn-primary" disabled={signupDisabled}>Sign up</button>
                     </div>
                 </form>
-            </div>
+            </Panel>
         );
     }
 });
