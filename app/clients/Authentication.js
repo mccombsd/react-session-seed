@@ -45,6 +45,23 @@ module.exports = {
         return false;
     },
 
+    passwordCriteria: function () {
+        return 'Passords must be 8 to 15 chars long and can contain alphanumeric, at least one special char and capital letter';
+    },
+
+    validUsername: function (username) {
+        var regex = /^[a-zA-Z0-9_-]{8,30}$/;
+
+        if (username) {
+            return regex.test(username);
+        }
+        return false;
+    },
+
+    usernameCriteria: function () {
+        return 'Usernames must be 8 to 30 chars long and can contain alphanumeric, underscores and dashes';
+    },
+
     validateUsername: function (username, callback) {
         if (callback) {
             superagent.get('/user/validateUsername', 'username=' + username, function (err, response) {

@@ -16,7 +16,9 @@ var React = require('react'),
     Col = Bootstrap.Col,
     Panel = Bootstrap.Panel,
     ButtonToolbar = Bootstrap.ButtonToolbar,
-    Button = Bootstrap.Button;
+    Button = Bootstrap.Button,
+    OverlayTrigger = Bootstrap.OverlayTrigger,
+    Popover = Bootstrap.Popover;
 
 var Register = React.createClass({
     mixins: [React.addons.LinkedStateMixin],
@@ -115,15 +117,23 @@ var Register = React.createClass({
                     <Row className="form-group">
                         <Col xs={12} sm={8} smOffset={2} md={6} mdOffset={3}>
                             <Panel>
-                                <Input
-                                    name="username"
-                                    type="text"
-                                    label="Username"
-                                    placeholder="Enter username"
-                                    bsStyle={this.usernameStyle()}
-                                    valueLink={this.linkState('username')}
-                                    onBlur={this.validateUsername}
-                                />
+                                <OverlayTrigger
+                                    trigger="hover"
+                                    delayShow={300}
+                                    delayHide={300}
+                                    placement="bottom"
+                                    overlay={<Popover title="Username rules">{Auth.usernameCriteria()}</Popover>}
+                                >
+                                    <Input
+                                        name="username"
+                                        type="text"
+                                        label="Username"
+                                        placeholder="Enter username"
+                                        bsStyle={this.usernameStyle()}
+                                        valueLink={this.linkState('username')}
+                                        onBlur={this.validateUsername}
+                                    />
+                                </OverlayTrigger>
                                 <Input
                                     name="email"
                                     type="email"
@@ -132,14 +142,22 @@ var Register = React.createClass({
                                     bsStyle={this.emailStyle()}
                                     valueLink={this.linkState('email')}
                                 />
-                                <Input
-                                    name="password"
-                                    type="password"
-                                    label="Password"
-                                    placeholder="Enter password"
-                                    bsStyle={this.passwordStyle()}
-                                    valueLink={this.linkState('password')}
-                                />
+                                <OverlayTrigger
+                                    trigger="hover"
+                                    delayShow={300}
+                                    delayHide={300}
+                                    placement="bottom"
+                                    overlay={<Popover title="Password rules">{Auth.passwordCriteria()}</Popover>}
+                                >
+                                    <Input
+                                        name="password"
+                                        type="password"
+                                        label="Password"
+                                        placeholder="Enter password"
+                                        bsStyle={this.passwordStyle()}
+                                        valueLink={this.linkState('password')}
+                                    />
+                                </OverlayTrigger>
                                 <Input
                                     name="password2"
                                     type="password"
