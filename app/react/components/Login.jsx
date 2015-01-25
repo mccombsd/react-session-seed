@@ -39,8 +39,20 @@ var Login = React.createClass({
                     <Row className="form-group">
                         <Col xs={12} sm={8} smOffset={2} md={6} mdOffset={3}>
                             <Panel>
-                                <Input type="text" label="Username" placeholder="Enter username" name="username" valueLink={this.linkState('username')} />
-                                <Input label="Password" type="password" placeholder="Enter password" name="password" valueLink={this.linkState('password')} />
+                                <Input
+                                    type="text"
+                                    label="Username"
+                                    placeholder="Enter username"
+                                    name="username"
+                                    valueLink={this.linkState('username')}
+                                />
+                                <Input
+                                    label="Password"
+                                    type="password"
+                                    placeholder="Enter password"
+                                    name="password"
+                                    valueLink={this.linkState('password')}
+                                />
                                 <ButtonToolbar>
                                     <Button type="submit" bsStyle="primary" disabled={this.disableLogin()}>Login</Button>
                                     <Button bsStyle="default" href="/register">Register</Button>

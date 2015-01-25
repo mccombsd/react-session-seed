@@ -12,8 +12,11 @@ var React = require('react'),
     Input = Bootstrap.Input,
     Label = Bootstrap.Label,
     Grid = Bootstrap.Grid,
+    Row = Bootstrap.Row,
     Col = Bootstrap.Col,
-    Panel = Bootstrap.Panel;
+    Panel = Bootstrap.Panel,
+    ButtonToolbar = Bootstrap.ButtonToolbar,
+    Button = Bootstrap.Button;
 
 var Register = React.createClass({
     mixins: [React.addons.LinkedStateMixin],
@@ -60,6 +63,38 @@ var Register = React.createClass({
         return Auth.validEmail(this.state.email);
     },
 
+    usernameStyle: function () {
+        if (!this.state.validUsername && this.state.username)
+            return 'error';
+        if (this.state.validUsername && this.state.username)
+            return 'success';
+        return '';
+    },
+
+    emailStyle: function () {
+        if (!this.validateEmail() && this.state.email)
+            return 'error';
+        if (this.validateEmail() && this.state.email)
+            return 'success';
+        return '';
+    },
+
+    passwordStyle: function () {
+        if (!this.validPassword() && this.state.password)
+            return 'error';
+        if (this.validPassword() && this.state.password)
+            return 'success';
+        return '';
+    },
+
+    password2Style: function () {
+        if (!this.validPassword2() && this.state.password2)
+            return 'error';
+        if (this.validPassword2() && this.state.password2)
+            return 'success';
+        return '';
+    },
+
     render: function () {
         var signupDisabled = 'disabled',
             passwordValid = this.validPassword(),
@@ -74,88 +109,52 @@ var Register = React.createClass({
             signupDisabled = '';
         }
 
-        var usernameClasses = cx({
-            'form-group': true,
-            'has-error': !this.state.validUsername && this.state.username,
-            'has-success': this.state.validUsername && this.state.username
-        });
-
-        var emailClasses = cx({
-            'form-group': true,
-            'has-error': !emailValid && this.state.email,
-            'has-success': emailValid && this.state.email
-        });
-
-        var passwordClasses = cx({
-            'form-group': true,
-            'has-error': !passwordValid && this.state.password,
-            'has-success': passwordValid && this.state.password
-        });
-
-        var password2Classes = cx({
-            'form-group': true,
-            'has-error': !password2Valid && this.state.password2,
-            'has-success': password2Valid && this.state.password2
-        });
-
         return (
-            <Panel>
-                <form className="form-horizontal" action="/user/register" method="post">
-                    <div className={usernameClasses}>
-                        <label className="col-sm-2 col-sm-offset-2">User name</label>
-                        <div className="col-sm-4">
-                            <input
-                                className="form-control"
-                                name="username"
-                                type="text"
-                                placeholder="Enter user name"
-                                valueLink={this.linkState('username')}
-                                onBlur={this.validateUsername}
-                            />
-                        </div>
-                    </div>
-                    <div className={emailClasses}>
-                        <label className="col-sm-2 col-sm-offset-2">Email</label>
-                        <div className="col-sm-4">
-                            <input
-                                className="form-control"
-                                name="email"
-                                type="email"
-                                placeholder="email@domain.com"
-                                valueLink={this.linkState('email')}
-                            />
-                        </div>
-                    </div>
-                    <div className={passwordClasses}>
-                        <label className="col-sm-2 col-sm-offset-2">Password</label>
-                        <div className="col-sm-4">
-                            <input
-                                className="form-control"
-                                name="password"
-                                type="password"
-                                placeholder="Enter password"
-                                valueLink={this.linkState('password')}
-                            />
-                        </div>
-                    </div>
-                    <div className={password2Classes}>
-                        <div className="col-sm-2 col-sm-offset-2"></div>
-                        <div className="col-sm-4">
-                            <input
-                                className="form-control"
-                                name="password2"
-                                type="password"
-                                placeholder="Re-enter password"
-                                valueLink={this.linkState('password2')}
-                            />
-                        </div>
-                    </div>
-                    <div className="col-sm-2 col-sm-offset-2"></div>
-                    <div className="col-sm-4">
-                        <button className="btn btn-primary" disabled={signupDisabled}>Sign up</button>
-                    </div>
-                </form>
-            </Panel>
+            <form className="form-signin" action="/user/register" method="post">
+                <Grid>
+                    <Row className="form-group">
+                        <Col xs={12} sm={8} smOffset={2} md={6} mdOffset={3}>
+                            <Panel>
+                                <Input
+                                    name="username"
+                                    type="text"
+                                    label="Username"
+                                    placeholder="Enter username"
+                                    bsStyle={this.usernameStyle()}
+                                    valueLink={this.linkState('username')}
+                                    onBlur={this.validateUsername}
+                                />
+                                <Input
+                                    name="email"
+                                    type="email"
+                                    label="Email"
+                                    placeholder="email@domain.com"
+                                    bsStyle={this.emailStyle()}
+                                    valueLink={this.linkState('email')}
+                                />
+                                <Input
+                                    name="password"
+                                    type="password"
+                                    label="Password"
+                                    placeholder="Enter password"
+                                    bsStyle={this.passwordStyle()}
+                                    valueLink={this.linkState('password')}
+                                />
+                                <Input
+                                    name="password2"
+                                    type="password"
+                                    placeholder="Re-enter password"
+                                    bsStyle={this.password2Style()}
+                                    valueLink={this.linkState('password2')}
+                                />
+                                <ButtonToolbar>
+                                    <Button bsStyle="primary" type="submit" disabled={signupDisabled}>Sign up</Button>
+                                </ButtonToolbar>
+                            </Panel>
+                        </Col>
+                    </Row>
+                </Grid>
+            </form>
         );
     }
 });
