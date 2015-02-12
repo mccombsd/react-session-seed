@@ -10,7 +10,6 @@ var React = require('react'),
     Auth = require('../../clients/Authentication'),
     Bootstrap = require('react-bootstrap'),
     Input = Bootstrap.Input,
-    Label = Bootstrap.Label,
     Grid = Bootstrap.Grid,
     Row = Bootstrap.Row,
     Col = Bootstrap.Col,
@@ -53,7 +52,7 @@ var Register = React.createClass({
     validateUsername: function () {
         var that = this;
 
-        if (!this.state.username) {
+        if (!this.state.username || !Auth.validUsername(this.state.username)) {
             return false;
         }
         Auth.validateUsername(this.state.username, function (res) {

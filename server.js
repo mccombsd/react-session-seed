@@ -47,8 +47,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 var passport = require('./passport/Setup')(app);
+var IsAuthorizedUser = require('./passport/AuthorizeRoute').IsAuthorizedUser;
 
-app.get('/api/loadItems', function (req, res) {
+app.get('/api/loadItems', IsAuthorizedUser, function (req, res) {
     console.log('get(/api/loadItems)');
 
     var pItems = ItemModel.find().exec();
@@ -61,7 +62,7 @@ app.get('/api/loadItems', function (req, res) {
     });
 });
 
-app.post('/api/addItem', function (req, res) {
+app.post('/api/addItem', IsAuthorizedUser, function (req, res) {
     console.log('post(/api/addItem): ' + JSON.stringify(req.body));
 
     var newItem = new ItemModel();

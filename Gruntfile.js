@@ -27,7 +27,7 @@ module.exports = function(grunt) {
             dev: {
                 script: 'server',
                 options: {
-                    ext: 'js,jsx,html,ejs'
+                    ext: 'js,jsx,html'
                 }
             }
         }

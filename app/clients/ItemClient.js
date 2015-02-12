@@ -2,7 +2,8 @@
  * Created by Drew on 1/1/2015.
  */
 
-var request = require('superagent');
+var request = require('superagent'),
+    Auth = require('./Authentication');
 
 module.exports = {
     load: function (success, failure) {
@@ -26,12 +27,16 @@ module.exports = {
             .send(JSON.stringify(item))
             .end(
                 function (err, res) {
-                    if (err) {
-                        failure(err);
-                        return;
-                    }
+                    Auth.requestValidation(err, res,
+                        function (err, res) {
+                            if (err) {
+                                failure(err);
+                                return;
+                            }
 
-                    success();
+                            success();
+                        }
+                    );
                 }
             );
     }

@@ -5,7 +5,8 @@
 var User = require('../schema/User'),
     Passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
-    bcrypt = require('bcrypt-nodejs');
+    bcrypt = require('bcrypt-nodejs'),
+    IsAuthorizedUser = require('./AuthorizeRoute').IsAuthorizedUser;
 
 module.exports = function (app) {
     app.use(Passport.initialize());
@@ -24,9 +25,6 @@ module.exports = function (app) {
                 passReqToCallback : true
             },
             function(req, username, password, done) {
-
-                console.log('login validation: ' + username);
-
                 // check in mongo if a user with username exists or not
                 User.findOne({ 'username' :  username },
                     function(err, user) {
@@ -59,15 +57,21 @@ module.exports = function (app) {
             function(req, username, password, done) {
                 findOrCreateUser = function(){
                     // find a user in Mongo with provided username
+
+                    if (!Auth.validUsername(username)) {
+                        return done(null, false,
+                            req.flash('message','Username is not valid'));
+                    }
+
                     User.findOne({ 'username': username },function(err, user) {
                         // In case of any error return
                         if (err){
-                            console.log('Error in SignUp: '+err);
+                            //console.log('Error in SignUp: ' + err);
                             return done(err);
                         }
                         // already exists
                         if (user) {
-                            console.log('User already exists');
+                            //console.log('User already exists');
                             return done(null, false,
                                 req.flash('message','User Already Exists'));
                         } else {
@@ -85,7 +89,7 @@ module.exports = function (app) {
                                     console.log('Error in Saving user: '+err);
                                     throw err;
                                 }
-                                console.log('User Registration succesful');
+                                //console.log('User Registration succesful');
                                 return done(null, newUser);
                             });
                         }
@@ -162,8 +166,6 @@ module.exports = function (app) {
     });
 
     function isValidPassword(user, password) {
-        console.log('isValidPassword: ' + password);
-        console.log('isValidPassword: ' + user.password);
         return bcrypt.compareSync(
             password,
             user.password

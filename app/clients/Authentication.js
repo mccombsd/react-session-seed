@@ -18,6 +18,22 @@ module.exports = {
         return this._loggedIn;
     },
 
+    requestValidation: function (err, res, callback) {
+        //TODO: check for 401 and redirect to login
+        //TODO: take a return URL with form data to supply
+
+        return function (err, res, callback) {
+
+            if (res.status === 401) {
+                window.location.replace('/login');
+            }
+            else if (callback) {
+                callback(err, res);
+            }
+        }
+        //return;
+    },
+
     username: function () {
         if (USER_DATA) {
             this._username = USER_DATA.username;
@@ -29,11 +45,17 @@ module.exports = {
         return this._username;
     },
 
+    passwordCriteria: function () {
+        return 'Must be 8 to 25 chars long and can contain alphanumeric, at least one special char and capital letter';
+    },
+
     validPassword: function (password) {
-        var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,15}$/;
+        var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,25}$/;
 
         return regex.test(password);
     },
+
+
 
     validEmail: function (email) {
         var regex = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/;
@@ -45,9 +67,7 @@ module.exports = {
         return false;
     },
 
-    passwordCriteria: function () {
-        return 'Passords must be 8 to 15 chars long and can contain alphanumeric, at least one special char and capital letter';
-    },
+
 
     validUsername: function (username) {
         var regex = /^[a-zA-Z0-9_-]{8,30}$/;
@@ -59,7 +79,7 @@ module.exports = {
     },
 
     usernameCriteria: function () {
-        return 'Usernames must be 8 to 30 chars long and can contain alphanumeric, underscores and dashes';
+        return 'Must be 8 to 30 chars long and can contain alphanumeric, underscores and dashes';
     },
 
     validateUsername: function (username, callback) {
