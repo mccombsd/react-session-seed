@@ -18,20 +18,20 @@ module.exports = {
         return this._loggedIn;
     },
 
-    requestValidation: function (err, res, callback) {
-        //TODO: check for 401 and redirect to login
-        //TODO: take a return URL with form data to supply
+    requestValidation: function (success, failure) {
+         //TODO: take a return URL with form data to supply
 
-        return function (err, res, callback) {
+        return function (err, res) {
 
             if (res.status === 401) {
                 window.location.replace('/login');
             }
-            else if (callback) {
-                callback(err, res);
+            else if (err) {
+                failure(err);
+                return;
             }
+            success();
         }
-        //return;
     },
 
     username: function () {

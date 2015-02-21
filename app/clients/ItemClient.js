@@ -26,18 +26,7 @@ module.exports = {
             .set('Content-Type', 'application/json')
             .send(JSON.stringify(item))
             .end(
-                function (err, res) {
-                    Auth.requestValidation(err, res,
-                        function (err, res) {
-                            if (err) {
-                                failure(err);
-                                return;
-                            }
-
-                            success();
-                        }
-                    );
-                }
+                Auth.requestValidation(success, failure)
             );
     }
 }
