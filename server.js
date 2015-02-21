@@ -5,8 +5,7 @@
 //For requiring `.jsx` files as Node modules
 require('node-jsx').install({extension: '.jsx'});
 
-var fs = require('fs'),
-    express = require('express'),
+var express = require('express'),
     path = require('path'),
     favicon = require('serve-favicon'),
     logger = require('morgan'),
@@ -14,15 +13,11 @@ var fs = require('fs'),
     bodyParser = require('body-parser'),
     debug = require('debug')('DevMag'),
     React = require('react'),
-    Plates = require('plates'),
     config = require('./config')('development'),
     mongoose = require('mongoose'),
     ItemModel = require('./schema/Item'),
-    UserModel = require('./schema/User'),
     flash = require('connect-flash');
 
-//var passport = require('passport'),
-//    LocalStrategy = require('passport-local').Strategy,
 var expressSession = require('express-session'),
     appRenderer = require('./routes/app');
 var app = express();
@@ -46,8 +41,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-var passport = require('./passport/Setup')(app);
-var IsAuthorizedUser = require('./passport/AuthorizeRoute').IsAuthorizedUser;
+require('./server/Setup')(app);
+var IsAuthorizedUser = require('./server/AuthorizeRoute').IsAuthorizedUser;
 
 app.get('/api/loadItems', IsAuthorizedUser, function (req, res) {
     console.log('get(/api/loadItems)');
@@ -120,22 +115,3 @@ dbConnection.once('open', function () {
         console.log('Express server listening on port ' + expressServer.address().port);
     });
 });
-
-
-/*
-* Handles injects the application before serving base html
-*/
-function renderHtml(res, appHtml, appData) {
-    fs.readFile(
-        path.join(__dirname, 'public', 'base.html'),
-        { encoding: 'utf-8'},
-        function(err, tmpl) {
-            var html = Plates.bind(tmpl, {
-                "App": appHtml  //, appData: 'APP_DATA = ' + JSON.stringify(appData)
-            });
-
-            res.set('Content-Type', 'text/html');
-            res.send(html);
-        }
-    );
-}

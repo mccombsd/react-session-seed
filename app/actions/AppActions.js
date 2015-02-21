@@ -11,7 +11,7 @@ module.exports = {
         this.dispatch(AppContsants.ADD_ITEM, newItem);
         ItemClient.add(newItem,
             function () {
-                this.dispatch(AppContsants.ADDz_ITEM_SUCCESS);
+                this.dispatch(AppContsants.ADD_ITEM_SUCCESS);
             }.bind(this),
             function (err) {
                 this.dispatch(AppContsants.ADD_ITEM_FAILURE, err);

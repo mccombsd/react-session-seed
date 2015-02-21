@@ -6,7 +6,8 @@ var User = require('../schema/User'),
     Passport = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     bcrypt = require('bcrypt-nodejs'),
-    IsAuthorizedUser = require('./AuthorizeRoute').IsAuthorizedUser;
+    IsAuthorizedUser = require('./AuthorizeRoute').IsAuthorizedUser,
+    Auth = require('../app/clients/Authentication');
 
 module.exports = function (app) {
     app.use(Passport.initialize());

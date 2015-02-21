@@ -44,7 +44,7 @@ module.exports = function (req, res, next) {
         username = req.user.username;
     }
 
-    var html = "";
+    var html = '';
     renderHtml(
         res,
         html,
